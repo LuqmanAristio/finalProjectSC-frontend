@@ -15,7 +15,7 @@ export default function Main() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [lokalImage, setLokal] = useState(false);
 
-    const handleFileChange = (event) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files[0];
         setSelectedFile(file);
         setLokal(false)   

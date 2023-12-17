@@ -12,13 +12,20 @@ import Prediction from './Prediction'
 
 export default function Main() {
 
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [lokalImage, setLokal] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [lokal, setLokal] = useState<boolean>(false);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
-        setLokal(false)   
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+    
+        if (files && files.length > 0) {
+            const file = files[0];
+            setSelectedFile(file);
+            setLokal(false);
+        } else {
+            // Handle the case when files are null or empty
+            console.error("No files selected");
+        }
     };
 
     const handleImageClick = (image) => {
@@ -107,7 +114,7 @@ export default function Main() {
             </div>
 
             {selectedFile && 
-                        <Prediction check={lokalImage} result={selectedFile} onClose={handleClosePrediction}></Prediction>
+                        <Prediction check={lokal} result={selectedFile} onClose={handleClosePrediction}></Prediction>
                     }
         </div>
     )

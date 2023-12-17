@@ -24,7 +24,7 @@ const Prediction: React.FC<PredictionProps> = ({ check, result, onClose }) => {
             </button>
             <div className="relative w-3/6 h-3/4 mr-5">
                 <Image 
-                    src={check === false? URL.createObjectURL(result) : result}
+                    src={URL.createObjectURL(result)}
                     alt="Uploaded"
                     layout="fill"
                     objectFit="cover"

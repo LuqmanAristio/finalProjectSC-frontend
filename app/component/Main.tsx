@@ -14,6 +14,7 @@ export default function Main() {
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [lokal, setLokal] = useState<boolean>(false);
+    const [dragging, setDragging] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -27,11 +28,31 @@ export default function Main() {
             console.error("No files selected");
         }
     };
-    
 
     const handleClosePrediction = () => {
         setSelectedFile(null);
     }
+
+    const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setDragging(true);
+      };
+    
+      const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setDragging(false);
+      };
+    
+      const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setDragging(false);
+    
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+          const file = files[0];
+          setSelectedFile(file);
+        }
+      };
 
     return(
         <div className='w-5/6 h-full flex items-center justify-between'>
@@ -47,7 +68,13 @@ export default function Main() {
                 </div>
             </div>
             <div className="w-2/4 h-full ml-10 flex items-center justify-center flex-col">
-                <div className='rounded-xl w-full h-3/6 bg-white upload flex items-center justify-center flex-col relative'>
+                <div 
+                    className='rounded-xl w-full h-3/6 bg-white upload flex items-center justify-center flex-col relative'
+                    onDragEnter={handleDragEnter}
+                    onDragLeave={handleDragLeave}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleDrop}
+                >
                     <button
                         className="block bg-[#EE5874] text-white font-semibold py-3 rounded-2xl px-7 text-xl absolute hover:bg-[#FB2F55]"
                         onClick={() => {

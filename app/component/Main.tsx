@@ -50,7 +50,12 @@ export default function Main() {
                 <div className='rounded-xl w-full h-3/6 bg-white upload flex items-center justify-center flex-col relative'>
                     <button
                         className="block bg-[#EE5874] text-white font-semibold py-3 rounded-2xl px-7 text-xl absolute hover:bg-[#FB2F55]"
-                        onClick={() => document.getElementById('getFile').click()}
+                        onClick={() => {
+                            const fileInput = document.getElementById('getFile');
+                            if (fileInput) {
+                              fileInput.click();
+                            }
+                          }}
                     >
                         Upload Image
                     </button>

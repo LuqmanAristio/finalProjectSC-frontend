@@ -27,11 +27,6 @@ export default function Main() {
             console.error("No files selected");
         }
     };
-
-    const handleImageClick = (image) => {
-        setSelectedFile(image);
-        setLokal(true)
-      };
     
 
     const handleClosePrediction = () => {
@@ -67,46 +62,6 @@ export default function Main() {
                     />
                     
                     <h4 className='absolute bottom-32 text-lg text-[#727272]'>or drag and drop a file</h4>
-                </div>
-                <div className='w-5/6 h-fit flex items-center mt-10 mb-5'>
-                    <div className='w-1/4 font-bold text-[#4D4D4D]'>
-                        <h3 className='text-lg'>No image?</h3>
-                        <h3 className='text-lg'>Try one of these :</h3>
-                    </div>
-                    <div className='flex w-3/4 justify-between ml-3'>
-                        <div className='w-1/5 h-16 bg-black'>
-                            <Image 
-                                src={adeno}
-                                alt='adeno'
-                                className='object-cover w-full h-full'
-                                onClick={() => handleImageClick(adeno)}
-                            />
-                        </div>
-                        <div className='w-1/5 h-16 bg-black'>
-                            <Image 
-                                src={normal}
-                                alt='normal'
-                                className='object-cover w-full h-full'
-                                onClick={() => handleImageClick(normal)}
-                            />
-                        </div>
-                        <div className='w-1/5 h-16 bg-black'>
-                            <Image 
-                                src={large}
-                                alt='large'
-                                className='object-cover w-full h-full'
-                                onClick={() => handleImageClick(large)}
-                            />
-                        </div>
-                        <div className='w-1/5 h-16 bg-black'>
-                            <Image 
-                                src={squamos}
-                                alt='squamos'
-                                className='object-cover w-full h-full'
-                                onClick={() => handleImageClick(squamos)}
-                            />
-                        </div>
-                    </div>
                 </div>
                 <div className='w-5/6 mt-5'>
                     <h4 className='text-[#4D4D4D]'><span className='font-bold'>Note</span> : The system built is not always accurate, it is only used for initial diagnosis.  The final decision is in the hands of the expert</h4>

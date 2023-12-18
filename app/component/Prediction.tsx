@@ -11,10 +11,29 @@ interface PredictionProps {
 const Prediction: React.FC<PredictionProps> = ({ check, result, onClose }) => {
 
     const [startPredict, setPredict] = useState(false);
+    const [resultPrediction, setResultPrediction] = useState('');
 
-    const handlePredict = () =>{
-        setPredict(current=>!current);
-    }
+    const handleSubmit = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('image', result);
+    
+          const response = await fetch('http://localhost:5000/predict', {
+            method: 'POST',
+            body: formData,
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            setResultPrediction(data.data.className);
+            setPredict(current=>!current);
+          } else {
+            console.error('Failed to call API:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error calling API', error);
+        }
+      };
 
     return (
       <div className="absolute bg-opacity-80 left-0 w-full h-full top-0 flex items-center justify-center bg-black">
@@ -34,19 +53,19 @@ const Prediction: React.FC<PredictionProps> = ({ check, result, onClose }) => {
                 
                 {startPredict === true?  
                 
-                <button onClick={handlePredict} className="hidden bg-[#EE5874] hover:bg-[#FB2F55] text-white font-semibold rounded-xl px-12 py-2 text-2xl">Predict</button>
+                <button className="hidden bg-[#EE5874] hover:bg-[#FB2F55] text-white font-semibold rounded-xl px-12 py-2 text-2xl">Predict</button>
 
                 :
 
-                <button onClick={handlePredict} className="bg-[#EE5874] hover:bg-[#FB2F55] text-white font-semibold rounded-xl px-12 py-2 text-2xl">Predict</button>
+                <button onClick={handleSubmit} className="bg-[#EE5874] hover:bg-[#FB2F55] text-white font-semibold rounded-xl px-12 py-2 text-2xl">Predict</button>
                 }
                 
 
                 {startPredict === true?  
                 
                 <div className="flex flex-col items-center">
-                    <h1 className="mt-16 w-full font-bold text-xl text-[#282828] text-center">Result : <span className="font-medium">Adenocarcinoma</span></h1>
-                    <button onClick={handlePredict} className="w-fit mt-5 bg-[#1AD163] hover:bg-[#1AA351] text-white font-semibold rounded-sm px-4 py-1 text-lg">Retry</button>
+                    <h1 className="mt-16 w-full font-bold text-xl text-[#282828] text-center">Result : <span className="font-medium">{resultPrediction}</span></h1>
+                    <button onClick={() => setPredict(false)} className="w-fit mt-5 bg-[#1AD163] hover:bg-[#1AA351] text-white font-semibold rounded-sm px-4 py-1 text-lg">Retry</button>
                 </div>
 
                 :

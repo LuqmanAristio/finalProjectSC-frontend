@@ -5,17 +5,20 @@ import { useState } from "react";
 interface PredictionProps {
     result: File;
     check: Boolean;
-    onClose: () => void; // Tipe fungsi tanpa parameter dan tanpa nilai kembali (void)
+    onClose: () => void;
 }
 
 const Prediction: React.FC<PredictionProps> = ({ check, result, onClose }) => {
 
     const [startPredict, setPredict] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [resultPrediction, setResultPrediction] = useState('');
+    const [prob, setProb] = useState('');
 
     const handleSubmit = async () => {
+      setLoading(true);
         try {
-          const formData = new FormData();
+          const formData = new FormData(); 
           formData.append('image', result);
     
           const response = await fetch('http://localhost:5000/predict', {
@@ -24,13 +27,21 @@ const Prediction: React.FC<PredictionProps> = ({ check, result, onClose }) => {
           });
     
           if (response.ok) {
+            setLoading(false);
             const data = await response.json();
             setResultPrediction(data.data.className);
+            
+            const percentage = (data.data.confidence * 100).toString();
+            setProb(percentage);
+
+
             setPredict(current=>!current);
           } else {
+            setLoading(false);
             console.error('Failed to call API:', response.statusText);
           }
         } catch (error) {
+          setLoading(false);
           console.error('Error calling API', error);
         }
       };
@@ -64,13 +75,21 @@ const Prediction: React.FC<PredictionProps> = ({ check, result, onClose }) => {
                 {startPredict === true?  
                 
                 <div className="flex flex-col items-center">
-                    <h1 className="mt-16 w-full font-bold text-xl text-[#282828] text-center">Result : <span className="font-medium">{resultPrediction}</span></h1>
+                    <h1 className="w-full font-bold text-xl text-[#282828] text-center">Result : <span className="font-medium">{resultPrediction}</span></h1>
+                    <h1 className="w-full font-bold text-xl text-[#282828] text-center">Probability : <span className="font-medium">{prob}%</span></h1>
                     <button onClick={() => setPredict(false)} className="w-fit mt-5 bg-[#1AD163] hover:bg-[#1AA351] text-white font-semibold rounded-sm px-4 py-1 text-lg">Retry</button>
                 </div>
 
                 :
 
+                <div></div>
+                }
+
+                {loading === true?
+
                 <div className="mt-2 lds-ring w-full h-1/6 flex items-center justify-center"><div></div><div></div><div></div><div></div></div>
+                :
+                <div></div>
                 }
 
                 
